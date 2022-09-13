@@ -11,14 +11,14 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from recipes.models import (
-    Cart, Fav, Ingredient, IngredientRecipe, Recipe, Tag)
+    Cart, Favorite, Ingredient, IngredientRecipe, Recipe, Tag)
 from users.models import Follow, User
 from api.filters import RecipeFilter, IngredientFilter
 from api.pagination import PageLimitPagination
 from api.permissions import IsAuthorOrReadOnly
 from api.serializers import (
     CartSerializer,
-    FavSerializer,
+    FavoriteSerializer,
     FollowSerializer,
     IngredientSerializer,
     RecipeGetSerializer,
@@ -45,43 +45,43 @@ class FollowViewSet(viewsets.ModelViewSet):
         return Follow.objects.filter(user=self.request.user)
 
     def create(self, request, *args, **kwargs):
-        author = get_object_or_404(
-            User,
-            id=self.kwargs.get('author_id')
-        )
+        author = get_object_or_404(User, id=self.kwargs.get('author_id'))
+
         if author == request.user:
             return Response(
                 'Нельзя подписываться на себя',
                 status=HTTPStatus.BAD_REQUEST
             )
+
         try:
             Follow.objects.create(author=author, user=self.request.user)
+
         except IntegrityError:
             return Response(
                 'Вы уже подписаны на данного автора',
                 status=HTTPStatus.BAD_REQUEST
             )
+
         follow = get_object_or_404(
             Follow,
             author=author,
             user=request.user
         )
         serializer = FollowSerializer(follow, many=False)
+
         return Response(
             data=serializer.data,
             status=HTTPStatus.CREATED
         )
 
     def delete(self, request, *args, **kwargs):
-        author = get_object_or_404(
-            User,
-            id=self.kwargs.get('author_id')
-        )
+        author = get_object_or_404(User, id=self.kwargs.get('author_id'))
         get_object_or_404(
             Follow,
             author=author,
             user=request.user
         ).delete()
+
         return Response(status=HTTPStatus.NO_CONTENT)
 
 
@@ -104,6 +104,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.request.method == 'GET':
             return RecipeGetSerializer
+
         return RecipePostSerializer
 
     def perform_create(self, serializer):
@@ -117,41 +118,24 @@ class TagViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (permissions.AllowAny,)
 
 
-class FavViewSet(CreateDestroyViewSet):
-    serializer_class = FavSerializer
+class FavoriteViewSet(CreateDestroyViewSet):
+    serializer_class = FavoriteSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
     def get_queryset(self):
-        return Fav.objects.filter(user=self.request.user)
+        return Favorite.objects.filter(user=self.request.user)
 
     def create(self, request, *args, **kwargs):
-        recipe = get_object_or_404(
-            Recipe,
-            id=self.kwargs.get('recipe_id')
-        )
-        Fav.objects.create(
-            user=request.user,
-            recipe=recipe
-        )
-        serializer = RecipeSmallSerializer(
-            recipe,
-            many=False
-        )
-        return Response(
-            data=serializer.data,
-            status=HTTPStatus.CREATED
-        )
+        recipe = get_object_or_404(Recipe, id=self.kwargs.get('recipe_id'))
+        Favorite.objects.create(user=request.user, recipe=recipe)
+        serializer = RecipeSmallSerializer(recipe, many=False)
+
+        return Response(data=serializer.data, status=HTTPStatus.CREATED)
 
     def delete(self, request, *args, **kwargs):
-        recipe = get_object_or_404(
-            Recipe,
-            id=self.kwargs.get('recipe_id')
-        )
-        get_object_or_404(
-            Fav,
-            user=request.user,
-            recipe=recipe
-        ).delete()
+        recipe = get_object_or_404(Recipe, id=self.kwargs.get('recipe_id'))
+        get_object_or_404(Favorite, user=request.user, recipe=recipe).delete()
+
         return Response(status=HTTPStatus.NO_CONTENT)
 
 
@@ -163,30 +147,25 @@ class CartViewSet(viewsets.ModelViewSet):
         return Cart.objects.filter(user=self.request.user)
 
     def create(self, request, *args, **kwargs):
-        recipe = get_object_or_404(
-            Recipe,
-            id=self.kwargs.get('recipe_id')
-        )
+        recipe = get_object_or_404(Recipe, id=self.kwargs.get('recipe_id'))
+
         try:
             Cart.objects.create(user=self.request.user, recipe=recipe)
+
         except IntegrityError:
             return Response(
                 'Этот рецепт уже в списке покупок',
                 status=HTTPStatus.BAD_REQUEST
             )
+
         serializer = RecipeSmallSerializer(recipe, many=False)
+
         return Response(data=serializer.data, status=HTTPStatus.CREATED)
 
     def delete(self, request, *args, **kwargs):
-        recipe = get_object_or_404(
-            Recipe,
-            id=self.kwargs.get('recipe_id')
-        )
-        get_object_or_404(
-            Cart,
-            user=request.user,
-            recipe=recipe
-        ).delete()
+        recipe = get_object_or_404(Recipe, id=self.kwargs.get('recipe_id'))
+        get_object_or_404(Cart, user=request.user, recipe=recipe).delete()
+
         return Response(status=HTTPStatus.NO_CONTENT)
 
 
@@ -198,6 +177,7 @@ class ShoppingListViewSet(APIView):
         carts = Cart.objects.filter(user=user)
         recipes = [cart.recipe for cart in carts]
         cart = {}
+
         for recipe in recipes:
             for ingredient in recipe.ingredients.all():
                 amount = get_object_or_404(
@@ -205,19 +185,21 @@ class ShoppingListViewSet(APIView):
                     recipe=recipe,
                     ingredient=ingredient
                 ).amount
+
                 if ingredient.name not in cart:
                     cart[ingredient.name] = amount
+
                 else:
                     cart[ingredient.name] += amount
+
         content = ''
+
         for item in cart:
-            units = get_object_or_404(
-                Ingredient,
-                name=item
-            ).measurement_unit
+            units = get_object_or_404(Ingredient, name=item).measurement_unit
             content += f'{item}: {cart[item]}{units}\n'
+
         response = HttpResponse(
-            content, content_type='text/plain,charset=utf8'
-        )
+            content, content_type='text/plain,charset=utf8')
         response['Content-Disposition'] = 'attachment; filename="cart.txt"'
+
         return response

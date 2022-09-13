@@ -6,29 +6,29 @@ class User(AbstractUser, PermissionsMixin):
 
     email = models.EmailField(
         verbose_name='Email',
-        max_length=128,
+        max_length=254,
         unique=True,
         help_text='Ваша электронная почта. Длина не более 128 символов',
     )
     username = models.CharField(
         verbose_name='Логин',
-        max_length=128,
+        max_length=150,
         unique=True,
         help_text='Логин длиной не более 128 символов',
     )
     password = models.CharField(
         verbose_name='Пароль',
-        max_length=128,
+        max_length=150,
         help_text='Пароль длиной не более 128 символов',
     )
     first_name = models.CharField(
         verbose_name='Имя',
-        max_length=128,
+        max_length=150,
         help_text='Ваше имя. Длина не более 128 символов',
     )
     last_name = models.CharField(
         verbose_name='Фамилия',
-        max_length=128,
+        max_length=150,
         help_text='Фамилия. Длина не более 128 символов',
     )
     is_superuser = models.BooleanField(

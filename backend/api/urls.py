@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 
 from api.views import (
     CartViewSet,
-    FavViewSet,
+    FavoriteViewSet,
     FollowViewSet,
     IngredientViewSet,
     RecipeViewSet,
@@ -21,9 +21,9 @@ router.register('tags', TagViewSet, basename='tags')
 
 urlpatterns = [
     re_path(
-        r'recipes/(?P<recipe_id>\d+)/fav/',
-        FavViewSet.as_view({'post': 'create', 'delete': 'delete'}),
-        name='favs'
+        r'recipes/(?P<recipe_id>\d+)/favorite/',
+        FavoriteViewSet.as_view({'post': 'create', 'delete': 'delete'}),
+        name='favorites'
     ),
     re_path(
         r'recipes/(?P<recipe_id>\d+)/shopping_cart/',

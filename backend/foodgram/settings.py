@@ -12,7 +12,6 @@ SECRET_KEY = os.getenv('SECRET_KEY', default='n%$86ksfcim3m@0v4w+c0ycrbhi9+#8_r0
 
 DEBUG = False
 
-# ALLOWED_HOSTS = ['*']
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
 # To avoid AttributeError: 'NoneType' object has no attribute 'split'
 # By default, os.environ.get and os.getenv will return None if the environment
@@ -26,6 +25,7 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
 ALLOWED_HOSTS = [] if not any(ALLOWED_HOSTS) else ALLOWED_HOSTS
 
 INSTALLED_APPS = [
+    'colorfield',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
