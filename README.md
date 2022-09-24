@@ -59,11 +59,9 @@ docker-compose exec backend python manage.py collectstatic --no-input
 ```
 
 ***
-```
-Проект будет доступен по адресу: http://localhost/
-Админка по адресу: http://localhost/admin/
+Проект будет доступен по адресу: http://localhost/ 
+Админка по адресу: http://localhost/admin/ 
 Общая документация по адресу: http://localhost/api/docs/
-```
 
 ***
 Необходимо залогинится в админку под суперпользователем, созданным ранее, и добавить там в раздел `Теги` необходимое количество тегов для рецепта в формате:
