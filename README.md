@@ -37,6 +37,7 @@ POSTGRES_PASSWORD=<<<пароль для БД>>>
 DB_HOST=db
 DB_PORT=5432
 ALLOWED_HOSTS=localhost,127.0.0.1,host_1,host_2,host_N(через запятую без пробелов)(добавить также названия создаваемых докером контейнеров. Как минимум, контейнера web, создаваемого на базе папки api_yamdb)
+DEBUG=DEBUG = False
 ```
 
 ***
@@ -61,7 +62,6 @@ docker-compose exec backend python manage.py collectstatic --no-input
 Проект будет доступен по адресу: http://localhost/
 Админка по адресу: http://localhost/admin/
 Общая документация по адресу: http://localhost/api/docs/
-Либо `127.0.0.1:8000` вместо `localhost`
 
 ***
 Необходимо залогинится в админку под суперпользователем, созданным ранее, и добавить там в раздел `Теги` необходимое количество тегов для рецепта в формате:
