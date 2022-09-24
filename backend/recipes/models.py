@@ -169,7 +169,7 @@ class Favorite(models.Model):
         constraints = (
             models.UniqueConstraint(
                 fields=('user', 'recipe'),
-                name='unique_favourite'
+                name='unique_favorite'
             ),
         )
 
