@@ -25,6 +25,7 @@ from api.serializers import (
     RecipeWriteSerializer,
     TagSerializer
 )
+from foodgram.config import CONTENT_TYPE, FILENAME
 
 
 class RecipeViewSet(ModelViewSet):
@@ -91,27 +92,25 @@ class RecipeViewSet(ModelViewSet):
             return Response(status=HTTP_400_BAD_REQUEST)
 
         ingredients = IngredientInRecipe.objects.filter(
-            recipe__shopping_cart__user=request.user
-        ).values(
-            'ingredient__name',
-            'ingredient__measurement_unit'
-        ).annotate(amount=Sum('amount'))
+            recipe__shopping_cart__user=request.user).values(
+                'ingredient__name', 'ingredient__measurement_unit').annotate(
+                    amount=Sum('amount')
+        )
 
         today = datetime.today()
-        shopping_list = (
+        content = (
             f'Foodgram. {today:%Y.%m.%d, %H:%M}\n'
             f'Список покупок для: {user.get_full_name()}\n\n'
         )
-        shopping_list += '\n'.join([
-            f': {ingredient["ingredient__name"]} '
-            f'({ingredient["ingredient__measurement_unit"]})'
-            f' : {ingredient["amount"]}'
+        content += '\n'.join([
+            f'- {ingredient["ingredient__name"]}, '
+            f'{ingredient["ingredient__measurement_unit"]}: '
+            f'{ingredient["amount"]}'
             for ingredient in ingredients
         ])
 
-        filename = f'{user.username}_shopping_list.txt'
-        response = HttpResponse(shopping_list, content_type='text/plain')
-        response['Content-Disposition'] = f'attachment; filename={filename}'
+        response = HttpResponse(content, content_type=CONTENT_TYPE)
+        response['Content-Disposition'] = f'attachment; filename={FILENAME}'
 
         return response
 

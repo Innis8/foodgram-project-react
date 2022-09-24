@@ -13,3 +13,9 @@ INGREDIENT_MIN_AMOUNT = 1
 
 # Импортируется в recipes.models
 INGREDIENT_DEFAULT_AMOUNT = 1
+
+# Импортируется в api.views
+CONTENT_TYPE = 'text/plain'
+
+# Импортируется в api.views
+FILENAME = 'shopping_list.txt'
