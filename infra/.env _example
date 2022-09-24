@@ -6,3 +6,4 @@ DB_HOST=db
 DB_PORT=5432
 ALLOWED_HOSTS=host_1,host_2,host_N(добавить также названия создаваемых докером контейнеров. Как минимум, контейнера web, создаваемого на базе папки api_yamdb)
 SECRET_KEY=YOUR_SECRET_KEY_FOR_SETTINGS.PY
+DEBUG=False
