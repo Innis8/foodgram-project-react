@@ -14,7 +14,7 @@ from rest_framework.serializers import ModelSerializer
 
 from recipes.models import Ingredient, IngredientInRecipe, Recipe, Tag
 from users.models import Follow
-from foodgram.config import INGREDIENT_MIN_AMOUNT
+from foodgram.config import INGREDIENT_MIN_AMOUNT, COOKING_TIME_MIN_VALUE
 
 User = get_user_model()
 
@@ -29,7 +29,8 @@ class CustomUserCreateSerializer(UserCreateSerializer):
 
 
 class CustomUserSerializer(UserSerializer):
-    is_subscribed = SerializerMethodField(read_only=True)
+    is_subscribed = SerializerMethodField(
+        method_name='get_is_subscribed', read_only=True)
 
     class Meta:
         model = User
@@ -50,8 +51,8 @@ class CustomUserSerializer(UserSerializer):
 
 
 class FollowSerializer(CustomUserSerializer):
-    recipes_count = SerializerMethodField()
-    recipes = SerializerMethodField()
+    recipes_count = SerializerMethodField(method_name='get_recipes_count')
+    recipes = SerializerMethodField(method_name='get_recipes')
 
     class Meta(CustomUserSerializer.Meta):
         fields = CustomUserSerializer.Meta.fields + (
@@ -101,11 +102,13 @@ class TagSerializer(ModelSerializer):
 
 class RecipeReadSerializer(ModelSerializer):
     tags = TagSerializer(many=True, read_only=True)
-    ingredients = SerializerMethodField()
+    ingredients = SerializerMethodField(method_name='get_ingredients')
     author = CustomUserSerializer(read_only=True)
     image = Base64ImageField()
-    is_favorited = SerializerMethodField(read_only=True)
-    is_in_shopping_cart = SerializerMethodField(read_only=True)
+    is_favorited = SerializerMethodField(
+        method_name='get_is_favorited', read_only=True)
+    is_in_shopping_cart = SerializerMethodField(
+        method_name='get_is_in_shopping_cart', read_only=True)
 
     class Meta:
         model = Recipe
@@ -156,8 +159,8 @@ class IngredientInRecipeWriteSerializer(ModelSerializer):
 
 
 class RecipeWriteSerializer(ModelSerializer):
-    tags = PrimaryKeyRelatedField(queryset=Tag.objects.all(),
-                                  many=True)
+    tags = PrimaryKeyRelatedField(
+        queryset=Tag.objects.all(), many=True)
     author = CustomUserSerializer(read_only=True)
     ingredients = IngredientInRecipeWriteSerializer(many=True)
     image = Base64ImageField()
@@ -214,6 +217,15 @@ class RecipeWriteSerializer(ModelSerializer):
                     'tags': 'Теги должны быть уникальными!'
                 })
             tags_list.append(tag)
+        return value
+
+    def validate_cooking_time(self, value):
+        cooking_time = value
+
+        if cooking_time < COOKING_TIME_MIN_VALUE:
+            raise ValidationError({
+                'cooking_time': 'Время готовки должно быть хотя бы минуту!'
+            })
         return value
 
     def create_ingredients_amounts(self, ingredients, recipe):

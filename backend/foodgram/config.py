@@ -2,7 +2,7 @@
 Модуль с некоторыми настройками приложения.
 '''
 
-# Импортируется в recipes.models
+# Импортируется в api.serializers, recipes.models
 COOKING_TIME_MIN_VALUE = 1
 
 # Импортируется в recipes.models

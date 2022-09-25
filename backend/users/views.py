@@ -20,8 +20,8 @@ class CustomUserViewSet(UserViewSet):
 
     @action(
         detail=True,
-        methods=['post', 'delete'],
-        permission_classes=[IsAuthenticated]
+        methods=('post', 'delete'),
+        permission_classes=(IsAuthenticated,)
     )
     def subscribe(self, request, **kwargs):
         user = request.user
