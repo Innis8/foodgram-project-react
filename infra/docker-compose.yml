@@ -9,9 +9,7 @@ services:
       - ./.env
 
   backend:
-    build:
-      context: ../backend
-      dockerfile: Dockerfile
+    image: innis8/foodgram_backend:v1
     restart: always
     volumes:
       - static_value:/app/static/
@@ -23,9 +21,7 @@ services:
       - ./.env
 
   frontend:
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
+    image: innis8/foodgram_frontend:v1
     volumes:
       - ../frontend/:/app/result_build/
 
