@@ -100,7 +100,6 @@ jobs:
             sudo docker-compose stop
             sudo docker-compose rm backend
             sudo docker-compose rm frontend
-            sudo rm -f .env
             sudo touch .env
             sudo chmod 666 .env
             echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
