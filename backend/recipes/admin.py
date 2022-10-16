@@ -5,8 +5,14 @@ from recipes.models import (
     Favorite, Ingredient, IngredientInRecipe, Recipe, ShoppingCart, Tag)
 
 
+class IngredientRecipeInLine(admin.TabularInline):
+    model = IngredientInRecipe
+    extra = 0
+
+
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
+    inlines = (IngredientRecipeInLine,)
     list_display = (
         'id', 'name', 'author', 'cooking_time', 'how_many_times_favorited')
     readonly_fields = ('how_many_times_favorited',)
