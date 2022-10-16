@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.contrib.admin import display
 from django.contrib.auth.admin import UserAdmin
 
 from users.models import Follow, User
