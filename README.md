@@ -268,6 +268,7 @@ DB_HOST=db
 DB_PORT=5432
 ALLOWED_HOSTS=localhost,127.0.0.1,host_1,host_2,host_N(через запятую без пробелов)(Через запятую без пробелов. Добавить также названия создаваемых докером контейнеров. Например, контейнеров backend, frontend, db, nginx)
 DEBUG=TRUE (для тестовых запусков, на проде заменить на FALSE)
+```
 
 ***
 Файл `backend/Dockerfile` удалить либо переименовать в, например, `backend/Dockerfile_for_remote`. Переименовать файл `backend/Dockerfile_for_local` в `backend/Dockerfile`.
