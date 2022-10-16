@@ -97,9 +97,7 @@ jobs:
           script: |
             sudo docker pull innis8/foodgram_backend
             sudo docker pull innis8/foodgram_frontend
-            sudo docker-compose stop
-            sudo docker-compose rm backend
-            sudo docker-compose rm frontend
+            sudo docker-compose down
             sudo touch .env
             sudo chmod 666 .env
             echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
@@ -110,7 +108,7 @@ jobs:
             echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
             echo DB_HOST=${{ secrets.DB_HOST }} >> .env
             echo DB_PORT=${{ secrets.DB_PORT }} >> .env
-            sudo docker-compose up -d
+            sudo docker-compose up -d --build
             
   send_message:
     if: github.ref == 'refs/heads/master'
