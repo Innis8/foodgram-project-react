@@ -63,7 +63,7 @@ python -c 'from django.core.management.utils import get_random_secret_key; print
 Пример заполнения infra/.env
 
 ```
-SECRET_KEY=YOUR_SECRET_KEY_FOR_SETTINGS.PY
+SECRET_KEY=YOUR_SECRET_KEY_FOR_SETTINGS.PY (свой секретный ключ из settings.py, который генерируется в процессе создания приложения, либо сгенерировать самостоятельно по инструкции выше. Сам ключ обернуть в двойные кавычки "". Связано это с тем, что в секретном ключе часто встречаются символы, рацсениваемые, как спецсимволы, например, #, ) или (. Из-за этого передача секретного ключа может быть неполной. Сами кавычки не изменят итоговый SECRET_KEY)
 DB_ENGINE=django.db.backends.postgresql
 DB_NAME=postgres
 POSTGRES_USER=postgres
@@ -259,7 +259,7 @@ python -c 'from django.core.management.utils import get_random_secret_key; print
 Пример заполнения infra/.env
 
 ```
-SECRET_KEY=YOUR_SECRET_KEY_FOR_SETTINGS.PY
+SECRET_KEY="YOUR_SECRET_KEY_FOR_SETTINGS.PY" (свой секретный ключ из settings.py, который генерируется в процессе создания приложения, либо сгенерировать самостоятельно по инструкции выше. Сам ключ обернуть в двойные кавычки "". Связано это с тем, что в секретном ключе часто встречаются символы, рацсениваемые, как спецсимволы, например, #, ) или (. Из-за этого передача секретного ключа может быть неполной. Сами кавычки не изменят итоговый SECRET_KEY)
 DB_ENGINE=django.db.backends.postgresql
 DB_NAME=postgres
 POSTGRES_USER=postgres
@@ -268,6 +268,13 @@ DB_HOST=db
 DB_PORT=5432
 ALLOWED_HOSTS=localhost,127.0.0.1,host_1,host_2,host_N(через запятую без пробелов)(Через запятую без пробелов. Добавить также названия создаваемых докером контейнеров. Например, контейнеров backend, frontend, db, nginx)
 DEBUG=TRUE (для тестовых запусков, на проде заменить на FALSE)
+
+***
+Файл `backend/Dockerfile` удалить либо переименовать в, например, `backend/Dockerfile_for_remote`. Переименовать файл `backend/Dockerfile_for_local` в `backend/Dockerfile`.
+
+Файл `frontend/Dockerfile` удалить либо переименовать в, например, `frontend/Dockerfile_for_remote`. Переименовать файл `frontend/Dockerfile_for_local` в `backend/Dockerfile`.
+
+Файл `infra/docker-compose.yml` в , например, `infra/docker-compose_for_remote.yml`. Переименовать файл `infra/docker-compose_for_local.yml` в `infra/docker-compose.yml`.
 
 ***
 Перейти в директорию infra и выполнить команду:
