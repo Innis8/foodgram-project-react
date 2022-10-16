@@ -95,9 +95,6 @@ jobs:
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            sudo docker pull innis8/foodgram_backend
-            sudo docker pull innis8/foodgram_frontend
-            sudo docker-compose down
             sudo touch .env
             sudo chmod 666 .env
             echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
@@ -108,6 +105,9 @@ jobs:
             echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
             echo DB_HOST=${{ secrets.DB_HOST }} >> .env
             echo DB_PORT=${{ secrets.DB_PORT }} >> .env
+            sudo docker-compose down
+            sudo docker pull innis8/foodgram_backend
+            sudo docker pull innis8/foodgram_frontend
             sudo docker-compose up -d --build
             
   send_message:
