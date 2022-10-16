@@ -106,6 +106,8 @@ jobs:
             echo DB_HOST=${{ secrets.DB_HOST }} >> .env
             echo DB_PORT=${{ secrets.DB_PORT }} >> .env
             sudo docker-compose down
+            sudo docker pull innis8/foodgram_backend:v1
+            sudo docker pull innis8/foodgram_frontend:v1
             sudo docker-compose up -d --build
             
   send_message:
