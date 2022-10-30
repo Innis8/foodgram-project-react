@@ -2,13 +2,6 @@
 
 ![Status of workflow runs triggered by the push event](https://github.com/innis8/foodgram-project-react/actions/workflows/main.yml/badge.svg?event=push)
 
-Пользователи сайта:
-
-```
-admin@admin.com:qwe
-finwe@winwe.com:qazxsw21
-orome@orome.com:qazxsw21
-```
 
 ## Описание
 Онлайн-сервис и API для него. На этом сервисе пользователи смогут публиковать рецепты, подписываться на публикации других пользователей, добавлять понравившиеся рецепты в список «Избранное», а перед походом в магазин скачивать сводный список продуктов, необходимых для приготовления одного или нескольких выбранных блюд.
