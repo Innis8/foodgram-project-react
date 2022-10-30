@@ -2,12 +2,6 @@
 
 ![Status of workflow runs triggered by the push event](https://github.com/innis8/foodgram-project-react/actions/workflows/main.yml/badge.svg?event=push)
 
-Проект доступен по адресу: `http://178.154.226.19/`
-
-Админка по адресу: `http://178.154.226.19/admin/`
-
-Общая документация по адресу: `http://178.154.226.19/api/docs/`
-
 Пользователи сайта:
 
 ```
